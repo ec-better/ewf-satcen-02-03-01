@@ -11,7 +11,7 @@
     <version>2.0.0</version>
   </parent>
   <description>Sentinel-2 vegetation mask based on NDVI and BSI</description>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.1</version>
   <properties>
     <summary>Sentinel-2 vegetation mask based on NDVI and BSI</summary>
     <description>Sentinel-2 vegetation mask based on NDVI and BSI</description>
@@ -60,18 +60,16 @@
         </plugins>
       </build>
     </profile>
-
     <profile>
       <id>package-app</id>
       <activation>
-         <property>
-           <name>env</name>
-           <value>ci</value>
-         </property>
+        <property>
+          <name>env</name>
+          <value>ci</value>
+        </property>
       </activation>
       <build>
         <plugins>
-
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
@@ -95,7 +93,6 @@
               </execution>
             </executions>
           </plugin>
-
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>rpm-maven-plugin</artifactId>
