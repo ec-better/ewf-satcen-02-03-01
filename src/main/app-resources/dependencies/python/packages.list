@@ -232,7 +232,7 @@ psycopg2=2.7.3.1=py27h1368252_0
 ptyprocess=0.5.1=py27_0
 py=1.4.31=py27_0
 py_earthquakes=0.0.10=py27h32d85c1_0
-py_snap_helpers=0.0.3=py27_0
+py_snap_helpers=0.0.4=py27_0
 pyasn1=0.1.9=py27_0
 pycairo=1.10.0=py27_0
 pycodestyle=2.5.0=py27_0
@@ -407,7 +407,7 @@ singledispatch=3.4.0.3=py27_0
 sip=4.18=py27_0
 six=1.10.0=py27_0
 smmap2=2.0.1=py27_0
-snappy=6.0=py38_0
+snappy=6.0=py27h4a2d63d_0
 snowballstemmer=1.2.1=py27h44e2768_0
 snuggs=1.4.6=py_0
 sortedcollections=1.1.2=py27_0
