@@ -186,7 +186,7 @@ def pre_proces(input_references, bbox, ndvi_threshold, bsi_threshold, n_classes,
                                                                               ndvi_threshold,
                                                                               bsi_expression,
                                                                               bsi_threshold)
-    # NDVI MASK & BSI MASK added
+    # NDVI MASK & BSI MASK added-----
     bsi_mask_expression='{0} ? 128 :{1} <= {2}? 1:0'.format(invalid_expression,bsi_expression,bsi_threshold)
     ndvi_mask_expression='{0} ? 128 :{1} >= {2}? 1:0'.format(invalid_expression,ndvi_expression,ndvi_threshold)
     
