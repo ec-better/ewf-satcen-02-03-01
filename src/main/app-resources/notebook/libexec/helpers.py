@@ -186,6 +186,9 @@ def pre_proces(input_references, bbox, ndvi_threshold, bsi_threshold, n_classes,
                                                                               ndvi_threshold,
                                                                               bsi_expression,
                                                                               bsi_threshold)
+    # NDVI MASK & BSI MASK added
+    bsi_mask_expression='{0} ? 128 :{1} >= {2}? 1:0'.format(invalid_expression,bsi_expression,bsi_threshold)
+    ndvi_mask_expression='{0} ? 128 :{1} >= {2}? 1:0'.format(invalid_expression,ndvi_expression,ndvi_threshold)
     
     ndvi_classes = dict((int(k.strip()), v.strip().replace('#', ',')) for k,v in  
                              (item.split('=') for item in n_classes.split(',')))
@@ -224,10 +227,17 @@ def pre_proces(input_references, bbox, ndvi_threshold, bsi_threshold, n_classes,
 
     expressions.append(mask_expression)
     
+    expressions.append(bsi_mask_expression)
+    expressions.append(ndvi_mask_expression)
+    
+    
     band_names = ['ndvi_class',
                   'bsi_class',
                   'cloud_mask',
-                  'vegetation_mask']
+                  'vegetation_mask',
+                  'bsi_mask',
+                  'ndvi_mask'
+                 ]
 
     metadata = dict()
     metadata['B02'] = 'im1b2'
