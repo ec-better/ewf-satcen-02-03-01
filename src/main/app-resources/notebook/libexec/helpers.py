@@ -129,7 +129,12 @@ def pre_proces(input_references, bbox, ndvi_threshold, bsi_threshold, n_classes,
     if os.path.exists(vrt):
         os.remove(vrt)
     
+    gdal.UseExceptions()
     ds_vrt = gdal.BuildVRT(vrt, vsi_list, options=vrt_options)
+    
+    while ds_vrt is None:
+        ds_vrt = gdal.Open(vrt,  gdal.OF_UPDATE)
+    
     ds_vrt.FlushCache()
     
     ds_vrt = None
