@@ -112,7 +112,7 @@ def cog(input_tif, output_tif):
     os.remove('{}.ovr'.format(input_tif))
     os.remove(input_tif)
     
-def pre_proces(input_references, bbox, ndvi_threshold, bsi_threshold, n_classes, b_classes, output_name, username, api_key):
+def pre_proces(input_references, bbox, ndvi_threshold, bsi_threshold, output_name, username, api_key):
     
     
     x_min, y_min, x_max, y_max = bbox
@@ -194,55 +194,34 @@ def pre_proces(input_references, bbox, ndvi_threshold, bsi_threshold, n_classes,
     # NDVI MASK & BSI MASK added-----
     bsi_mask_expression='{0} ? 128 :{1} <= {2}? 1:0'.format(invalid_expression,bsi_expression,bsi_threshold)
     ndvi_mask_expression='{0} ? 128 :{1} >= {2}? 1:0'.format(invalid_expression,ndvi_expression,ndvi_threshold)
-    
-    ndvi_classes = dict((int(k.strip()), v.strip().replace('#', ',')) for k,v in  
-                             (item.split('=') for item in n_classes.split(',')))
 
-
-    bsi_classes = dict((int(k.strip()), v.strip().replace('#', ',')) for k,v in  
-                             (item.split('=') for item in b_classes.split(',')))
     
     
     expressions = []
 
     invalid_data = 128
-
-    for index, vi_class in enumerate([ndvi_classes, bsi_classes]):
-
-        f = '{} ? {}'.format(invalid_expression, invalid_data)
-
-        for _class in vi_class.keys():
-
-            if index == 0: vi_expression = ndvi_expression
-            if index == 1: vi_expression = bsi_expression
-
-            expression = '{0} >= {1} && {0} < {2} ? {3}'.format(vi_expression,
-                                                                    vi_class[_class].split(',')[0],
-                                                                    vi_class[_class].split(',')[1],
-                                                                    _class)
-
-
-            f = '{} : {} '.format(f, expression)
-
-        f = '{}: {}'.format(f, 0)
-
-        expressions.append(f)
-
-    expressions.append('{} ? {} : 0'.format(invalid_expression, invalid_data))
-
     expressions.append(mask_expression)
     
+    expressions.append('{} ? {} : {}'.format(invalid_expression, invalid_data, bsi_expression))
     expressions.append(bsi_mask_expression)
+    
+    expressions.append('{} ? {} : {}'.format(invalid_expression, invalid_data, ndvi_expression))
     expressions.append(ndvi_mask_expression)
     
+    expressions.append('{} ? {} : 0'.format(invalid_expression, invalid_data))
+
     
-    band_names = ['ndvi_class',
-                  'bsi_class',
-                  'cloud_mask',
-                  'vegetation_mask',
+    
+    
+    
+    
+    
+    band_names = ['vegetation_mask',
+                  'bsi_values',
                   'bsi_mask',
-                  'ndvi_mask'
-                 ]
+                  'ndvi_values',
+                  'ndvi_mask',
+                  'cloud_mask']
 
     metadata = dict()
     metadata['B02'] = 'im1b2'
@@ -259,7 +238,7 @@ def pre_proces(input_references, bbox, ndvi_threshold, bsi_threshold, n_classes,
         BandMathX.SetParameterStringList('il', [clipped_vrt])
         BandMathX.SetParameterString('out', '{}_{}'.format(index, output_name))
         BandMathX.SetParameterString('exp', expression)
-        BandMathX.SetParameterOutputImagePixelType('out', otbApplication.ImagePixelType_uint8)
+        BandMathX.SetParameterOutputImagePixelType('out', otbApplication.ImagePixelType_double)
 
         BandMathX.ExecuteAndWriteOutput()
         
@@ -282,7 +261,18 @@ def pre_proces(input_references, bbox, ndvi_threshold, bsi_threshold, n_classes,
     os.remove(vrt)
     os.remove(clipped_vrt)
     
-def get_mosaic_expression(no_data, image_count, classes):
+def get_mosaic_expressionx(no_data, image_count):
+    nodata_expr = '(' + ' && '.join(['im{}b1 == 128'.format(n) for n in range(1, image_count + 1)]) + ') ? {} : '.format(no_data)
+    
+    c = []  
+    for n in range(1, image_count + 1): 
+        c.append('(im{0}b1 >= -1 && im{0}b1 <= 1) ? im{0}b1'.format(n))
+    
+    return nodata_expr + ' : '.join(c) + ' : 255'
+
+
+
+def get_mask_expressionx(no_data, image_count, classes):
     
     nodata_expr = '(' + ' && '.join(['im{}b1 == 128'.format(n) for n in range(1, image_count + 1)]) + ') ? {} : '.format(no_data)
     
