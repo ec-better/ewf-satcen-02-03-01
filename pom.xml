@@ -11,7 +11,7 @@
     <version>3.0.1-docker</version>
   </parent>
   <description>Sentinel-2 vegetation mask based on NDVI and BSI</description>
-  <version>0.9</version>
+  <version>0.10</version>
   <properties>
     <summary>Sentinel-2 vegetation mask based on NDVI and BSI</summary>
     <description>Sentinel-2 vegetation mask based on NDVI and BSI</description>
