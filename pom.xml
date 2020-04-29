@@ -11,7 +11,7 @@
     <version>2.0.0</version>
   </parent>
   <description>Sentinel-2 vegetation mask based on NDVI and BSI</description>
-  <version>0.10</version>
+  <version>0.11</version>
   <properties>
     <summary>Sentinel-2 vegetation mask based on NDVI and BSI</summary>
     <description>Sentinel-2 vegetation mask based on NDVI and BSI</description>
